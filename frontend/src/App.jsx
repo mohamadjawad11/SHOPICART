@@ -20,6 +20,7 @@ import Orders from './components/seller/Orders';
 import { useAppContext } from './context/AppContext';
 import Loading from './components/Loading';
 import Contact from './pages/Contact';
+//https://shopicart-beta.vercel.app/
 
 const App = () => {
   const { showUserLogin, setShowUserLogin, isSeller } = useAppContext();
