@@ -28,6 +28,7 @@ export const registerUser = async (req, res) => {
             httpOnly: true,
             secure: isProduction,
             sameSite: isProduction ? 'none' : 'strict',
+            domain: isProduction ? '.vercel.app' : undefined,
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
 
@@ -66,6 +67,7 @@ export const LoginUser = async (req, res) => {
             httpOnly: true,
             secure: isProduction,
             sameSite: isProduction ? 'none' : 'strict',
+            domain: isProduction ? '.vercel.app' : undefined,
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
 
@@ -77,7 +79,6 @@ export const LoginUser = async (req, res) => {
     }
 }
 
-
 export const isAuth = async (req, res) => {
     try {
         const user = await User.findById(req.userId).select("-password");
@@ -87,9 +88,6 @@ export const isAuth = async (req, res) => {
         return res.status(500).json({ success: false, message: 'Server Error' });
     }
 };
-
-
-
 
 export const logoutUser = async (req, res) => {
     try {
@@ -109,6 +107,3 @@ export const logoutUser = async (req, res) => {
         return res.status(500).json({ message: error.message });
     }
 }
-
-
-
