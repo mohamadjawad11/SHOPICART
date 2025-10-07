@@ -23,12 +23,11 @@ export const registerUser = async (req, res) => {
         const user = new User({ name, email, password: hashedPassword });
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
-        // Corrected cookie configuration
+        // Cookie configuration: avoid setting a public suffix domain on Vercel
         res.cookie('token', token, {
             httpOnly: true,
             secure: isProduction,
             sameSite: isProduction ? 'none' : 'strict',
-            domain: isProduction ? '.vercel.app' : undefined,
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
 
@@ -62,12 +61,11 @@ export const LoginUser = async (req, res) => {
 
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
         
-        // Corrected cookie configuration
+        // Cookie configuration: avoid setting a public suffix domain on Vercel
         res.cookie('token', token, {
             httpOnly: true,
             secure: isProduction,
             sameSite: isProduction ? 'none' : 'strict',
-            domain: isProduction ? '.vercel.app' : undefined,
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
 
