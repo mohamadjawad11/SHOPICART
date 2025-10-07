@@ -21,12 +21,20 @@ connectCloudinary();
 
 
 
-const allowedOrigins = [
-  'http://localhost:5173',
-  'https://shopicart-beta.vercel.app' 
-];
+// Build allowed origins from env (comma-separated), fallback to sensible defaults
+const allowedOrigins = (process.env.ALLOWED_ORIGINS || 'http://localhost:5173,https://shopicart-beta.vercel.app')
+  .split(',')
+  .map(origin => origin.trim())
+  .filter(Boolean);
 
-app.use(cors({ origin: allowedOrigins, credentials: true }));
+app.use(cors({
+  credentials: true,
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true); // allow same-origin/non-browser clients
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    return callback(new Error('CORS: Origin not allowed'), false);
+  }
+}));
 
 app.post('/stripe',express.raw({type:'application/json'}),stripeWebhooks)
 
